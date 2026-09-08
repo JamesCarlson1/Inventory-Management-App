@@ -1,3 +1,5 @@
+package com.james.inventory;
+
 public class Product {
     private int quantity;
     private String name;

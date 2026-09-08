@@ -1,0 +1,1 @@
+IMPORTANT: This project is the actual Inventory-Management-App that I want to make. I am using claude as a helper in this one like the test project but this time I am the one writing all of the code whilst Claude is only helping by steering me in the right direction.
