@@ -3,6 +3,8 @@ package com.james.inventory.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +25,22 @@ public class SqliteAccountDao implements AccountDao {
     }
 
     public Optional<Account> findById (Long accountId) throws SQLException {
+        String sql = "SELECT account_id, username FROM accounts WHERE account_id = ?";
 
+        // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            // This finds the correct user based on the given id.
+            pstmt.setLong(1, accountId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Account account = new Account(rs.getLong("account_id"), rs.getString("username"));
+                    return Optional.of(account);
+                } else {
+                    return Optional.empty();
+                }
+            }
+        }
     }
 
     public Optional<Account> findByUsername (String username) throws SQLException {
