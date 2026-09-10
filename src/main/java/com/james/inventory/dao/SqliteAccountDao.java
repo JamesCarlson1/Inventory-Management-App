@@ -22,7 +22,7 @@ public class SqliteAccountDao implements AccountDao {
     }
     
     public List<Account> findAll() throws SQLException {
-        String sql = "SELECT account_id, username FROM accounts";
+        String sql = "SELECT account_id, account_name FROM accounts";
         List<Account> accounts = new ArrayList<>();
 
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
@@ -31,7 +31,7 @@ public class SqliteAccountDao implements AccountDao {
             try (ResultSet rs = pstmt.executeQuery()) {
                 // Finds and all accounts currently available.
                 while (rs.next()) {
-                    accounts.add(new Account(rs.getLong("account_id"), rs.getString("username")));
+                    accounts.add(new Account(rs.getLong("account_id"), rs.getString("account_name")));
                 }
                 return accounts;
             }
