@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import com.james.inventory.domain.Account;
@@ -21,7 +22,21 @@ public class SqliteAccountDao implements AccountDao {
     }
     
     public List<Account> findAll() throws SQLException {
+        String sql = "SELECT account_id, username FROM accounts";
+        List<Account> accounts = new ArrayList<>();
 
+        // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            // This finds the correct user based on the given id.
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    accounts.add(new Account(rs.getLong("account_id"), rs.getString("username")));
+                    return accounts;
+                }
+                return accounts;
+            }
+        }
     }
 
     public Optional<Account> findById (Long accountId) throws SQLException {
