@@ -1,13 +1,12 @@
 package com.james.inventory.dao;
 
-// The Interface
-
-import com.james.inventory.domain.Account;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import com.james.inventory.domain.Account;
+
+// The Interface
 public interface AccountDao {
     // All of these are contracts that classes that implement this class
     // have to abide by.
