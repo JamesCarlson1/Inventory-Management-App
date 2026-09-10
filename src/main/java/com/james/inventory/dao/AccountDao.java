@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface AccountDao {
     // All of these are contracts that classes that implement this class
     // have to abide by.
-    
+
     List<Account> findAll() throws SQLException;
 
     Optional<Account> findById (Long accountId) throws SQLException;
