@@ -13,3 +13,4 @@ CREATE TABLE items (
     UNIQUE(account_id, item_name),
     CHECK (amt >= 0)
 );
+INSERT INTO accounts (account_name) VALUES ('testuser2');
