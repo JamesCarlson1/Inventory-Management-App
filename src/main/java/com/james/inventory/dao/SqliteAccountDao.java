@@ -45,10 +45,11 @@ public class SqliteAccountDao implements AccountDao {
 
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-            // This finds the correct account_name based on the given accountId.
+            // Binds the parameter
             pstmt.setLong(1, userId);
 
             try (ResultSet rs = pstmt.executeQuery()) {
+                // Checks if a row was found.
                 if (rs.next()) {
                     Account account = new Account(rs.getLong("account_id"), rs.getString("account_name"));
                     return Optional.of(account);
@@ -64,10 +65,11 @@ public class SqliteAccountDao implements AccountDao {
 
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-            // This finds the correct account_id based on the given username(account_name).
+            // Binds the parameter.
             pstmt.setString(1, username);
 
             try (ResultSet rs = pstmt.executeQuery()) {
+                // Checks if a row was found.
                 if (rs.next()) {
                     Account account = new Account(rs.getLong("account_id"), rs.getString("account_name"));
                     return Optional.of(account);
@@ -82,7 +84,9 @@ public class SqliteAccountDao implements AccountDao {
         String sql = "INSERT INTO accounts (account_name) VALUES (?)";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            // Binds the parameter.
             pstmt.setString(1, account.getUsername());
+            // Executes the command.
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
@@ -95,6 +99,14 @@ public class SqliteAccountDao implements AccountDao {
     }
 
     public void delete (Long accountId) throws SQLException {
+        String sql = "DELETE FROM accounts WHERE account_id = ?";
 
+        // Try-with-resources manages the PreparedStatement.
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            // Binds the parameter.
+            pstmt.setLong(1, accountId);
+            // Executes the command.
+            pstmt.executeUpdate();
+        }
     }
 }
