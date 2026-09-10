@@ -27,12 +27,11 @@ public class SqliteAccountDao implements AccountDao {
 
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-            // This finds the correct user based on the given id.
 
             try (ResultSet rs = pstmt.executeQuery()) {
+                // Finds and all accounts currently available.
                 while (rs.next()) {
                     accounts.add(new Account(rs.getLong("account_id"), rs.getString("username")));
-                    return accounts;
                 }
                 return accounts;
             }
