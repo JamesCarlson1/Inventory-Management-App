@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -38,13 +40,13 @@ public class SqliteAccountDao implements AccountDao {
         }
     }
 
-    public Optional<Account> findById (Long accountId) throws SQLException {
+    public Optional<Account> findById (Long userId) throws SQLException {
         String sql = "SELECT account_id, account_name FROM accounts WHERE account_id = ?";
 
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             // This finds the correct account_name based on the given accountId.
-            pstmt.setLong(1, accountId);
+            pstmt.setLong(1, userId);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -62,7 +64,7 @@ public class SqliteAccountDao implements AccountDao {
 
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-            // This finds the correct account_id based on the given username.
+            // This finds the correct account_id based on the given username(account_name).
             pstmt.setString(1, username);
 
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -77,7 +79,19 @@ public class SqliteAccountDao implements AccountDao {
     }
 
     public Account create (Account account) throws SQLException {
+        String sql = "INSERT INTO accounts (account_name) VALUES (?)";
 
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, account.getUsername());
+            pstmt.executeUpdate();
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return new Account(rs.getLong(1), account.getUsername());
+                }
+            }
+        }
+        throw new SQLException("ERROR: Creating account failed: no ID obtained");
     }
 
     public void delete (Long accountId) throws SQLException {
