@@ -43,7 +43,7 @@ public class SqliteAccountDao implements AccountDao {
 
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-            // This finds the correct user based on the given id.
+            // This finds the correct account_name based on the given accountId.
             pstmt.setLong(1, accountId);
 
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -58,7 +58,22 @@ public class SqliteAccountDao implements AccountDao {
     }
 
     public Optional<Account> findByUsername (String username) throws SQLException {
+        String sql = "SELECT account_name, account_id FROM accounts WHERE account_name = ?";
 
+        // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            // This finds the correct account_id based on the given username.
+            pstmt.setString(1, username);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Account account = new Account(rs.getLong("account_id"), rs.getString("account_name"));
+                    return Optional.of(account);
+                } else {
+                    return Optional.empty();
+                }
+            }
+        }
     }
 
     public Account create (Account account) throws SQLException {
