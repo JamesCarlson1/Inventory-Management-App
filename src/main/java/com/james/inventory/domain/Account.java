@@ -1,6 +1,6 @@
 package com.james.inventory.domain;
 
-// Initializes an account Java Object.
+// Initializes an Account Java Object.
 
 public class Account {
     private final Long accountId;
@@ -16,6 +16,6 @@ public class Account {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 }
