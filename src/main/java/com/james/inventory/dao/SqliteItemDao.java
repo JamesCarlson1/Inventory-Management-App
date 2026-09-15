@@ -58,7 +58,7 @@ public class SqliteItemDao implements ItemDao {
     }
 
     public Optional<Item> findByItemId(Long itemId) throws SQLException {
-        String sql = "SELECT item_id, account_id, item_name, amt FROM accounts WHERE item_id = ?";
+        String sql = "SELECT item_id, account_id, item_name, amt FROM items WHERE item_id = ?";
 
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
@@ -68,7 +68,7 @@ public class SqliteItemDao implements ItemDao {
             try (ResultSet rs = pstmt.executeQuery()) {
                 // Checks if a row was found.
                 if (rs.next()) {
-                    Item item = new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("item_id"), rs.getLong("amt"));
+                    Item item = new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("amt"));
                     return Optional.of(item);
                 } else {
                     return Optional.empty();
@@ -78,17 +78,20 @@ public class SqliteItemDao implements ItemDao {
     }
 
     public Item create (Item item) throws SQLException {
-        String sql = "INSERT INTO items (item_name) VALUES (?)";
+        String sql = "INSERT INTO items (item_name, account_id, amt) VALUES (?, ?, ?)";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            // Binds the parameter.
-            pstmt.setLong(1, item.getItemId());
+            // Binds the parameters.
+            pstmt.setString(1, item.getItemName());
+            pstmt.setLong(2, item.getAccountId());
+            pstmt.setLong(3, item.getAmt());
+            
             // Executes the command.
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("item_id"), rs.getLong("amt"));
+                    return new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("amt"));
                 }
             }
         }
