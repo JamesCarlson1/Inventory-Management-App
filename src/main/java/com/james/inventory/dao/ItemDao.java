@@ -20,4 +20,6 @@ public interface ItemDao {
     Item create (Item item) throws SQLException;
 
     void delete (Long itemId) throws SQLException;
+
+    void update (Item item) throws SQLException;
 }
