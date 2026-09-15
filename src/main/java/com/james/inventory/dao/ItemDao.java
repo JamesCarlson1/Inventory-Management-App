@@ -15,7 +15,7 @@ public interface ItemDao {
 
     List<Item> findByAccountId(Long accountId) throws SQLException;
 
-    Optional<Item> findById(Long itemId) throws SQLException;
+    Optional<Item> findByItemId(Long itemId) throws SQLException;
 
     Item create (Item item) throws SQLException;
 

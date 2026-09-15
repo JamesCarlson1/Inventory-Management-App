@@ -17,6 +17,7 @@ public class Item {
         this.amt = amt;
     }
 
+    
     public Long getItemId () {
         return this.item_id;
     }
@@ -28,9 +29,11 @@ public class Item {
         this.item_name = item_name;
     }
 
+
     public Long getAccountId () {
         return this.account_id;
     }
+
 
     public Long getAmt () {
         return this.amt;
@@ -45,13 +48,13 @@ public class Item {
     }
 
     public void receive (long amt) {
-        setAmt(this.amt += amt);
+        setAmt(this.amt + amt);
     }
     public void sell (long amt) throws IllegalArgumentException{
         if (this.amt - amt < 0) { 
             throw new IllegalArgumentException("ERROR: Unable to sell the inputted amount.");
         } else {
-            setAmt(this.amt -= amt);
+            setAmt(this.amt - amt);
         }
     }
 }

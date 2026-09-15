@@ -22,32 +22,88 @@ public class SqliteItemDao implements ItemDao {
         this.connection = connection;
     }
 
+    // Isn't Optional<Item> since it holds a list and most likely the account already exists.
     public List<Item> findAll() throws SQLException {
-        String sql = "SELECT item_id, account_id, item_name, amt FROM items WHERE account_id = ?";
+        String sql = "SELECT item_id, account_id, item_name, amt FROM items";
         List<Item> items = new ArrayList<>();
         
+        // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    items.add(new Item(rs.getLong("item_id"), rs.getString("item_name")));
+                    items.add(new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("amt")));
                 }
                 return items;
             }
         }
     }
 
+    // Isn't Optional<Item> since it holds a list and most likely the account already exists.
     public List<Item> findByAccountId(Long accountId) throws SQLException {
+        String sql = "SELECT item_id, item_name, account_id, amt FROM items WHERE account_id = ?";
+        List<Item> items = new ArrayList<>();
+        
+        // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            // Binds the parameter
+            pstmt.setLong(1, accountId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    items.add(new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("amt")));
+                }
+                return items;
+            }
+        }
     }
 
-    public Optional<Item> findById(Long itemId) throws SQLException {
+    public Optional<Item> findByItemId(Long itemId) throws SQLException {
+        String sql = "SELECT item_id, account_id, item_name, amt FROM accounts WHERE item_id = ?";
 
+        // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            // Binds the parameter
+            pstmt.setLong(1, itemId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                // Checks if a row was found.
+                if (rs.next()) {
+                    Item item = new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("item_id"), rs.getLong("amt"));
+                    return Optional.of(item);
+                } else {
+                    return Optional.empty();
+                }
+            }
+        }
     }
 
     public Item create (Item item) throws SQLException {
+        String sql = "INSERT INTO items (item_name) VALUES (?)";
 
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            // Binds the parameter.
+            pstmt.setLong(1, item.getItemId());
+            // Executes the command.
+            pstmt.executeUpdate();
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("item_id"), rs.getLong("amt"));
+                }
+            }
+        }
+        throw new SQLException("ERROR: Creating item failed: no ID obtained");
     }
 
     public void delete (Long itemId) throws SQLException {
+        String sql = "DELETE FROM items WHERE item_id = ?";
 
+        // Try-with-resources manages the PreparedStatement.
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            // Binds the parameter.
+            pstmt.setLong(1, itemId);
+            // Executes the command.
+            pstmt.executeUpdate();
+        }
     }
 }
