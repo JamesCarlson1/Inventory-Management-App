@@ -108,4 +108,15 @@ public class SqliteAccountDao implements AccountDao {
             pstmt.executeUpdate();
         }
     }
+
+    public void update (Account account) throws SQLException {
+        String sql = "UPDATE accounts SET account_name = ? WHERE account_id = ?";
+
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            pstmt.setLong(1, account.getAccountId());
+            pstmt.setString(2, account.getUsername());
+
+            pstmt.executeUpdate();
+        }
+    }
 }

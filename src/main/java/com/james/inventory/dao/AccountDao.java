@@ -20,4 +20,6 @@ public interface AccountDao {
     Account create (Account account) throws SQLException;
 
     void delete (Long accountId) throws SQLException;
+
+    void update (Account account) throws SQLException;
 }
