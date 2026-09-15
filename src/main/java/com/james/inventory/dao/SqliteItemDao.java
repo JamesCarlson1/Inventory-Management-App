@@ -85,13 +85,13 @@ public class SqliteItemDao implements ItemDao {
             pstmt.setString(1, item.getItemName());
             pstmt.setLong(2, item.getAccountId());
             pstmt.setLong(3, item.getAmt());
-            
+
             // Executes the command.
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("amt"));
+                    return new Item(rs.getLong(1), item.getItemName(), item.getAccountId(), item.getAmt());
                 }
             }
         }
