@@ -111,7 +111,7 @@ public class SqliteItemDao implements ItemDao {
     }
 
     public void update (Item item) throws SQLException {
-        String sql = "UPDATE items SET item_name = ?, amt = ?, WHERE item_id = ?";
+        String sql = "UPDATE items SET item_name = ?, amt = ? WHERE item_id = ?";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setString(1, item.getItemName());
@@ -119,8 +119,6 @@ public class SqliteItemDao implements ItemDao {
             pstmt.setLong(3, item.getItemId());
 
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Unable to update item", e);
         }
     }
 }
