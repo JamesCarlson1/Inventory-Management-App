@@ -35,13 +35,13 @@ public class ItemService {
     public Item createItem (Long accountId, String itemName, long amt) throws SQLException {
         Optional<Account> ifExists = accountDao.findByAccountId(accountId);
 
-        // Can't do "null" since it can never return null. (Since not Optional<Item>) So you have to do ".isPresent()".
+        // Can't do "null" since it can never return null. (Since Optional<Account>) So you have to do ".isPresent()".
         if (!ifExists.isPresent()) {
             throw new IllegalArgumentException("ERROR: Account not found: " + accountId);
         }
         List<Item> existingItems = itemDao.findByAccountId(accountId);
 
-        // This checks to make sure that the item name does not exist already.
+        // This checks to make sure that the item name does not already exist.
         if (existingItems.stream().anyMatch(item -> item.getItemName().equals(itemName))) {
             throw new IllegalArgumentException("ERROR: Item name already exists: " + itemName + "     For given accountId: " + accountId);
         }
@@ -57,20 +57,22 @@ public class ItemService {
     public Item updateItemName (Long itemId, String newName) throws SQLException {
         Optional<Item> ifExists = itemDao.findByItemId(itemId);
 
-        // Can't do "null" since it can never return null. (Since not Optional<Account>)
+        // Can't do "null" since it can never return null. (Since Optional<Item>)
         if (!ifExists.isPresent()) {
             throw new IllegalArgumentException("ERROR: Item not found: " + itemId);
         }
+        Item existingItem = ifExists.get();
+        List<Item> existingItems = itemDao.findByAccountId(existingItem.getAccountId());
 
-        Optional<List<Item>> existingItems = itemDao.findByAccountId(ifExists.getAccountId());
-
-        if () {
-            throw new IllegalArgumentException("ERROR: Username already exists: " + newUsername);
+        // This checks to make sure that the item name does not already exist.
+        if (existingItems.stream().anyMatch(item -> item.getItemName().equals(newName) && !item.getItemId().equals(itemId))) {
+            throw new IllegalArgumentException("ERROR: item_name already exists: " + newName + " For the account_id: " + existingItem.getAccountId());
         }
 
-        Account updatedAccount = new Account(accountId, newUsername);
+        // Makes new updatedItem.
+        Item updatedItem = new Item(itemId, newName, existingItem.getAccountId(), existingItem.getAmt());
 
-        accountDao.update(updatedAccount); // Has to be updated before returned or else it returns as void.
-        return updatedAccount;
+        itemDao.update(updatedItem); // Has to be updated before returned or else it returns as void.
+        return updatedItem;
     }
 }

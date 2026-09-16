@@ -48,10 +48,12 @@ public class AccountService {
         }
         Optional<Account> accWUsername = accountDao.findByUsername(newUsername);
 
+        // This checks to make sure that the account name does not already exist.
         if (accWUsername.isPresent() && !accWUsername.get().getAccountId().equals(accountId)) {
             throw new IllegalArgumentException("ERROR: Username already exists: " + newUsername);
         }
 
+        // Makes new updatedAccount.
         Account updatedAccount = new Account(accountId, newUsername);
 
         accountDao.update(updatedAccount); // Has to be updated before returned or else it returns as void.
