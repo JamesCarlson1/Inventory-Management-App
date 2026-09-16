@@ -1,12 +1,11 @@
 package com.james.inventory.service;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.ResultSet;
 
 // Files that the method can use and call from.
+import java.util.List;
+import java.util.Optional;
+import com.james.inventory.domain.Account;
 import com.james.inventory.dao.AccountDao;
 
 public class AccountService {
