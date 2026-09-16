@@ -77,7 +77,7 @@ public class ItemService {
 
 
 
-    public void set (Long itemId, long amt) throws SQLException {
+    public Item set (Long itemId, long amt) throws SQLException {
         Optional<Item> ifExists = itemDao.findByItemId(itemId);
 
         // Can't do "null" since it can never return null. (Since Optional<Item>) So you have to do ".isPresent()".
@@ -89,9 +89,10 @@ public class ItemService {
         Item existingItem = ifExists.get();
         existingItem.setAmt(amt); // Has to be updated before returned or else it returns as void.
         itemDao.update(existingItem);
+        return existingItem;
     }
 
-    public void receive (Long itemId, long amt) throws SQLException {
+    public Item receive (Long itemId, long amt) throws SQLException {
         Optional<Item> ifExists = itemDao.findByItemId(itemId);
 
         // Can't do "null" since it can never return null. (Since Optional<Item>) So you have to do ".isPresent()".
@@ -103,9 +104,10 @@ public class ItemService {
         Item existingItem = ifExists.get();
         existingItem.receive(amt); // Has to be updated before returned or else it returns as void.
         itemDao.update(existingItem);
+        return existingItem;
     }
 
-    public void sell (Long itemId, long amt) throws SQLException {
+    public Item sell (Long itemId, long amt) throws SQLException {
         Optional<Item> ifExists = itemDao.findByItemId(itemId);
 
         // Can't do "null" since it can never return null. (Since Optional<Item>) So you have to do ".isPresent()".
@@ -117,5 +119,6 @@ public class ItemService {
         Item existingItem = ifExists.get();
         existingItem.sell(amt); // Has to be updated before returned or else it returns as void.
         itemDao.update(existingItem);
+        return existingItem;
     }
 }
