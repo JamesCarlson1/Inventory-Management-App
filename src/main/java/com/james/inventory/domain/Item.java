@@ -8,9 +8,9 @@ public class Item {
     private final Long item_id;
     private String item_name;
     private final Long account_id;
-    private Long amt;
+    private long amt;
 
-    public Item (Long item_id, String item_name, Long account_id, Long amt) {
+    public Item (Long item_id, String item_name, Long account_id, long amt) {
         this.item_id = item_id;
         this.item_name = item_name;
         this.account_id = account_id;
@@ -35,7 +35,7 @@ public class Item {
     }
 
 
-    public Long getAmt () {
+    public long getAmt () {
         return this.amt;
     }
 

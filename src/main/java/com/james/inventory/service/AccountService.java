@@ -2,9 +2,10 @@ package com.james.inventory.service;
 
 import java.sql.SQLException;
 
-// Files that the method can use and call from.
 import java.util.List;
 import java.util.Optional;
+
+// Files that the method can use and call from.
 import com.james.inventory.domain.Account;
 import com.james.inventory.dao.AccountDao;
 
