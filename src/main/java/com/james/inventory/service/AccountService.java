@@ -30,7 +30,8 @@ public class AccountService {
     public Account createAccount (String username) throws SQLException {
         Optional<Account> ifExists = accountDao.findByUsername(username);
 
-        if (ifExists != null) {
+        // Can't do "null" since it can never return null.
+        if (ifExists.isPresent()) {
             throw new IllegalArgumentException("ERROR: Username already exists: " + username);
         }
         Account account = new Account(null, username);
@@ -40,7 +41,8 @@ public class AccountService {
     public Account updateUsername(Long accountId, String newUsername) throws SQLException {
         Optional<Account> ifExists = accountDao.findById(accountId);
 
-        if (ifExists == null) {
+        // Can't do "null" since it can never return null.
+        if (ifExists.isPresent()) {
             throw new IllegalArgumentException("ERROR: Account not found: " + accountId);
         }
         Optional<Account> accWUsername = accountDao.findByUsername(newUsername);
