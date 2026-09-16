@@ -22,6 +22,8 @@ public class SqliteAccountDao implements AccountDao {
     public SqliteAccountDao (Connection connection) {
         this.connection = connection;
     }
+
+
     
     public List<Account> findAll() throws SQLException {
         String sql = "SELECT account_id, account_name FROM accounts";
@@ -80,6 +82,8 @@ public class SqliteAccountDao implements AccountDao {
         }
     }
 
+
+
     public Account create (Account account) throws SQLException {
         String sql = "INSERT INTO accounts (account_name) VALUES (?)";
 
@@ -109,6 +113,8 @@ public class SqliteAccountDao implements AccountDao {
             pstmt.executeUpdate();
         }
     }
+
+    
 
     public void update (Account account) throws SQLException {
         String sql = "UPDATE accounts SET account_name = ? WHERE account_id = ?";

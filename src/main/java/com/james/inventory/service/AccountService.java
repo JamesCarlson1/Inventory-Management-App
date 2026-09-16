@@ -16,6 +16,8 @@ public class AccountService {
         this.accountDao = accountDao;
     }
 
+    
+
     public List<Account> findAll() throws SQLException {
         return this.accountDao.findAll();
     }
@@ -27,6 +29,8 @@ public class AccountService {
     public void delete (Long accountId) throws SQLException {
         this.accountDao.delete(accountId);
     }
+
+
 
     public Account createAccount (String username) throws SQLException {
         Optional<Account> ifExists = accountDao.findByUsername(username);

@@ -22,6 +22,8 @@ public class SqliteItemDao implements ItemDao {
         this.connection = connection;
     }
 
+
+
     // Isn't Optional<Item> since it holds a list and most likely the account already exists.
     public List<Item> findAll() throws SQLException {
         String sql = "SELECT item_id, account_id, item_name, amt FROM items";
@@ -77,6 +79,8 @@ public class SqliteItemDao implements ItemDao {
         }
     }
 
+
+
     public Item create (Item item) throws SQLException {
         String sql = "INSERT INTO items (item_name, account_id, amt) VALUES (?, ?, ?)";
 
@@ -109,6 +113,8 @@ public class SqliteItemDao implements ItemDao {
             pstmt.executeUpdate();
         }
     }
+
+    
 
     public void update (Item item) throws SQLException {
         String sql = "UPDATE items SET item_name = ?, amt = ? WHERE item_id = ?";

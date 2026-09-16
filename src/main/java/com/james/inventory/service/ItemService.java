@@ -20,6 +20,8 @@ public class ItemService {
         this.accountDao = accountDao;
     }
 
+
+
     public List<Item> findByAccountId (Long accountId) throws SQLException {
         return this.itemDao.findByAccountId(accountId);
     }
@@ -31,6 +33,8 @@ public class ItemService {
     public void delete (Long itemId) throws SQLException {
         this.itemDao.delete(itemId);
     }
+
+
 
     public Item createItem (Long accountId, String itemName, long amt) throws SQLException {
         Optional<Account> ifExists = accountDao.findByAccountId(accountId);
@@ -50,21 +54,10 @@ public class ItemService {
         return itemDao.create(newItem);     
     }
 
-    public void receive (Long itemId, long amt) throws SQLException {
-        Optional<Item> ifExists = itemDao.findByItemId(itemId);
-
-        if (!ifExists.isPresent()) {
-            throw new IllegalArgumentException("ERROR: Item not found: " + itemId);
-        }
-
-        Item existingItem = ifExists.get();
-        existingItem.receive(amt);
-    }
-
     public Item updateItemName (Long itemId, String newName) throws SQLException {
         Optional<Item> ifExists = itemDao.findByItemId(itemId);
 
-        // Can't do "null" since it can never return null. (Since Optional<Item>)
+        // Can't do "null" since it can never return null. (Since Optional<Item>) So you have to do ".isPresent()".
         if (!ifExists.isPresent()) {
             throw new IllegalArgumentException("ERROR: Item not found: " + itemId);
         }
@@ -78,8 +71,51 @@ public class ItemService {
 
         // Makes new updatedItem.
         Item updatedItem = new Item(itemId, newName, existingItem.getAccountId(), existingItem.getAmt());
-
         itemDao.update(updatedItem); // Has to be updated before returned or else it returns as void.
         return updatedItem;
+    }
+
+
+
+    public void set (Long itemId, long amt) throws SQLException {
+        Optional<Item> ifExists = itemDao.findByItemId(itemId);
+
+        // Can't do "null" since it can never return null. (Since Optional<Item>) So you have to do ".isPresent()".
+        if (!ifExists.isPresent()) {
+            throw new IllegalArgumentException("ERROR: Item not found: " + itemId);
+        }
+
+        // Gets the item that exists.
+        Item existingItem = ifExists.get();
+        existingItem.setAmt(amt); // Has to be updated before returned or else it returns as void.
+        itemDao.update(existingItem);
+    }
+
+    public void receive (Long itemId, long amt) throws SQLException {
+        Optional<Item> ifExists = itemDao.findByItemId(itemId);
+
+        // Can't do "null" since it can never return null. (Since Optional<Item>) So you have to do ".isPresent()".
+        if (!ifExists.isPresent()) {
+            throw new IllegalArgumentException("ERROR: Item not found: " + itemId);
+        }
+
+        // Gets the item that exists.
+        Item existingItem = ifExists.get();
+        existingItem.receive(amt); // Has to be updated before returned or else it returns as void.
+        itemDao.update(existingItem);
+    }
+
+    public void sell (Long itemId, long amt) throws SQLException {
+        Optional<Item> ifExists = itemDao.findByItemId(itemId);
+
+        // Can't do "null" since it can never return null. (Since Optional<Item>) So you have to do ".isPresent()".
+        if (!ifExists.isPresent()) {
+            throw new IllegalArgumentException("ERROR: Item not found: " + itemId);
+        }
+
+        // Gets the item that exists.
+        Item existingItem = ifExists.get();
+        existingItem.sell(amt); // Has to be updated before returned or else it returns as void.
+        itemDao.update(existingItem);
     }
 }

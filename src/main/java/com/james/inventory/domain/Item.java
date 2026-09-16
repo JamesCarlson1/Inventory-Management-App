@@ -22,17 +22,22 @@ public class Item {
         return this.item_id;
     }
 
-    public String getItemName () {
-        return this.item_name;
-    }
-    public void setItemName (String item_name) {
-        this.item_name = item_name;
-    }
 
 
     public Long getAccountId () {
         return this.account_id;
     }
+
+
+
+    public String getItemName () {
+        return this.item_name;
+    }
+
+    public void setItemName (String item_name) {
+        this.item_name = item_name;
+    }
+
 
 
     public long getAmt () {
@@ -50,6 +55,7 @@ public class Item {
     public void receive (long amt) {
         setAmt(this.amt + amt);
     }
+
     public void sell (long amt) throws IllegalArgumentException{
         if (this.amt - amt < 0) { 
             throw new IllegalArgumentException("ERROR: Unable to sell the inputted amount.");
