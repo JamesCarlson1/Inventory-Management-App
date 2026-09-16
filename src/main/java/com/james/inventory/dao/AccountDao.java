@@ -15,7 +15,7 @@ public interface AccountDao {
 
     List<Account> findAll() throws SQLException;
 
-    Optional<Account> findById (Long accountId) throws SQLException;
+    Optional<Account> findByAccountId (Long accountId) throws SQLException;
 
     Optional<Account> findByUsername (String username) throws SQLException;
 

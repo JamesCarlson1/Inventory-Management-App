@@ -40,13 +40,13 @@ public class SqliteAccountDao implements AccountDao {
         }
     }
 
-    public Optional<Account> findById (Long userId) throws SQLException {
+    public Optional<Account> findByAccountId (Long accountId) throws SQLException {
         String sql = "SELECT account_id, account_name FROM accounts WHERE account_id = ?";
 
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             // Binds the parameter
-            pstmt.setLong(1, userId);
+            pstmt.setLong(1, accountId);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 // Checks if a row was found.

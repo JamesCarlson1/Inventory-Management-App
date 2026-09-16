@@ -33,13 +33,21 @@ public class ItemService {
     }
 
     public Item createItem (Long accountId, String itemName, long amt) throws SQLException {
-        Optional<Account> ifExists = accountDao.findById(accountId);
+        Optional<Account> ifExists = accountDao.findByAccountId(accountId);
+
+        // Can't do "null" since it can never return null. (Since not Optional<Item>) So you have to do ".isPresent()".
         if (!ifExists.isPresent()) {
-            throw new IllegalArgumentException("ERROR: Could not locate account: " + accountId);
+            throw new IllegalArgumentException("ERROR: Account not found: " + accountId);
         }
         List<Item> existingItems = itemDao.findByAccountId(accountId);
-        boolean nameTaken = existingItems.stream().anyMatch(item -> item.getItemName().equals(itemName));
 
+        // This checks to make sure that the item name does not exist already.
+        if (existingItems.stream().anyMatch(item -> item.getItemName().equals(itemName))) {
+            throw new IllegalArgumentException("ERROR: Item name already exists: " + itemName + "     For given accountId: " + accountId);
+        }
+
+        Item newItem = new Item(null, itemName, accountId, amt);
+        return itemDao.create(newItem);     
     }
 
     public void receive (Long itemId, long amt) throws SQLException {
@@ -47,6 +55,22 @@ public class ItemService {
     }
 
     public Item updateItemName (Long itemId, String newName) throws SQLException {
+        Optional<Item> ifExists = itemDao.findByItemId(itemId);
 
+        // Can't do "null" since it can never return null. (Since not Optional<Account>)
+        if (!ifExists.isPresent()) {
+            throw new IllegalArgumentException("ERROR: Item not found: " + itemId);
+        }
+
+        Optional<List<Item>> existingItems = itemDao.findByAccountId(ifExists.getAccountId());
+
+        if () {
+            throw new IllegalArgumentException("ERROR: Username already exists: " + newUsername);
+        }
+
+        Account updatedAccount = new Account(accountId, newUsername);
+
+        accountDao.update(updatedAccount); // Has to be updated before returned or else it returns as void.
+        return updatedAccount;
     }
 }

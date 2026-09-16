@@ -20,8 +20,8 @@ public class AccountService {
         return this.accountDao.findAll();
     }
 
-    public Optional<Account> findById (Long accountId) throws SQLException {
-        return this.accountDao.findById(accountId);
+    public Optional<Account> findByAccountId (Long accountId) throws SQLException {
+        return this.accountDao.findByAccountId(accountId);
     }
 
     public void delete (Long accountId) throws SQLException {
@@ -35,12 +35,12 @@ public class AccountService {
         if (ifExists.isPresent()) {
             throw new IllegalArgumentException("ERROR: Username already exists: " + username);
         }
-        Account account = new Account(null, username);
-        return accountDao.create(account);
+        Account newAccount = new Account(null, username);
+        return accountDao.create(newAccount);
     }
 
     public Account updateUsername(Long accountId, String newUsername) throws SQLException {
-        Optional<Account> ifExists = accountDao.findById(accountId);
+        Optional<Account> ifExists = accountDao.findByAccountId(accountId);
 
         // Can't do "null" since it can never return null. (Since not Optional<Account>)
         if (!ifExists.isPresent()) {
@@ -56,6 +56,5 @@ public class AccountService {
 
         accountDao.update(updatedAccount); // Has to be updated before returned or else it returns as void.
         return updatedAccount;
-
     }
 }
