@@ -41,7 +41,7 @@ public class AccountService {
     public Account updateUsername(Long accountId, String newUsername) throws SQLException {
         Optional<Account> ifExists = accountDao.findById(accountId);
 
-        // Can't do "null" since it can never return null.
+        // Can't do "null" since it can never return null. (Since not Optional<Account>)
         if (ifExists.isPresent()) {
             throw new IllegalArgumentException("ERROR: Account not found: " + accountId);
         }
@@ -53,7 +53,7 @@ public class AccountService {
 
         Account updatedAccount = new Account(accountId, newUsername);
 
-        accountDao.update(updatedAccount); // Has to be updated before returned or else it is void.
+        accountDao.update(updatedAccount); // Has to be updated before returned or else it returns as void.
         return updatedAccount;
 
     }
