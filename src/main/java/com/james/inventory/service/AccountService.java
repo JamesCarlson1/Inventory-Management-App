@@ -1,30 +1,37 @@
 package com.james.inventory.service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
 // Files that the method can use and call from.
 import com.james.inventory.dao.AccountDao;
-import com.james.inventory.dao.ItemDao;
 
 public class AccountService {
+    private final AccountDao accountDao;
+
     public AccountService (AccountDao accountDao) {
+        this.accountDao = accountDao;
+    }
+
+    public List<Account> findAll() throws SQLException {
 
     }
 
-    public findAll() {
+    public Optional<Account> findById (Long accountId) throws SQLException {
+
+    }
+    public void delete (Long accountId) throws SQLException {
 
     }
 
-    public findById (Long accountId) {
-
-    }
-    public delete (Long accountId) {
+    public Account createAccount (String username) throws SQLException {
 
     }
 
-    public createAccount (String username) {
-
-    }
-
-    public updateUsername(Long accountId, String newUsername) {
+    public void updateUsername(Long accountId, String newUsername) throws SQLException {
 
     }
 }
