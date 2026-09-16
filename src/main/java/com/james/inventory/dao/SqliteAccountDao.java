@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
+// Files that the method can use and call from.
 import com.james.inventory.domain.Account;
 
 // The JDBC Implementation

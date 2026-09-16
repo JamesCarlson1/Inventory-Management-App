@@ -1,9 +1,11 @@
 package com.james.inventory.dao;
 
 import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Optional;
 
+// Files that the method can use and call from.
 import com.james.inventory.domain.Item;
 
 // The Interface
