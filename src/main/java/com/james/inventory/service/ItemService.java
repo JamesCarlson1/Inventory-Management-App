@@ -51,7 +51,14 @@ public class ItemService {
     }
 
     public void receive (Long itemId, long amt) throws SQLException {
+        Optional<Item> ifExists = itemDao.findByItemId(itemId);
 
+        if (!ifExists.isPresent()) {
+            throw new IllegalArgumentException("ERROR: Item not found: " + itemId);
+        }
+
+        Item existingItem = ifExists.get();
+        existingItem.receive(amt);
     }
 
     public Item updateItemName (Long itemId, String newName) throws SQLException {
@@ -66,7 +73,7 @@ public class ItemService {
 
         // This checks to make sure that the item name does not already exist.
         if (existingItems.stream().anyMatch(item -> item.getItemName().equals(newName) && !item.getItemId().equals(itemId))) {
-            throw new IllegalArgumentException("ERROR: item_name already exists: " + newName + " For the account_id: " + existingItem.getAccountId());
+            throw new IllegalArgumentException("ERROR: Item name already exists: " + newName + " For the account_id: " + existingItem.getAccountId());
         }
 
         // Makes new updatedItem.
