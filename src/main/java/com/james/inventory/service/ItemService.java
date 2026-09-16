@@ -38,15 +38,15 @@ public class ItemService {
             throw new IllegalArgumentException("ERROR: Could not locate account: " + accountId);
         }
         List<Item> existingItems = itemDao.findByAccountId(accountId);
-        boolean nameTaken = ifExists.stream().anyMatch(existingItems -> existingItems.getItemName().equals(itemName));
+        boolean nameTaken = existingItems.stream().anyMatch(item -> item.getItemName().equals(itemName));
 
     }
 
-    public receive (Long itemId, long amt) throws SQLException {
+    public void receive (Long itemId, long amt) throws SQLException {
 
     }
 
-    public updateItemName (Long itemId, String newName) throws SQLException {
+    public Item updateItemName (Long itemId, String newName) throws SQLException {
 
     }
 }
