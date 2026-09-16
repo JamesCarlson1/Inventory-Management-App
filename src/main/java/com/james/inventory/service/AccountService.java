@@ -42,12 +42,12 @@ public class AccountService {
         Optional<Account> ifExists = accountDao.findById(accountId);
 
         // Can't do "null" since it can never return null. (Since not Optional<Account>)
-        if (ifExists.isPresent()) {
+        if (!ifExists.isPresent()) {
             throw new IllegalArgumentException("ERROR: Account not found: " + accountId);
         }
         Optional<Account> accWUsername = accountDao.findByUsername(newUsername);
 
-        if (accWUsername != null && accWUsername.get().getAccountId() != accountId) {
+        if (accWUsername.isPresent() && !accWUsername.get().getAccountId().equals(accountId)) {
             throw new IllegalArgumentException("ERROR: Username already exists: " + newUsername);
         }
 
