@@ -28,17 +28,31 @@ public class AccountService {
     }
 
     public Account createAccount (String username) throws SQLException {
-        Account ifExists = accountDao.findByUsername(username);
+        Optional<Account> ifExists = accountDao.findByUsername(username);
 
-        if (ifExists == null) {
-            Account account = new Account(null, username);
-            return accountDao.create(account);
-        } else {
-            throw new IllegalArgumentException("Username already exists: " + username);
+        if (ifExists != null) {
+            throw new IllegalArgumentException("ERROR: Username already exists: " + username);
         }
+        Account account = new Account(null, username);
+        return accountDao.create(account);
     }
 
-    public void updateUsername(Long accountId, String newUsername) throws SQLException {
+    public Account updateUsername(Long accountId, String newUsername) throws SQLException {
+        Optional<Account> ifExists = accountDao.findById(accountId);
+
+        if (ifExists == null) {
+            throw new IllegalArgumentException("ERROR: Account not found: " + accountId);
+        }
+        Optional<Account> accWUsername = accountDao.findByUsername(newUsername);
+
+        if (accWUsername != null && accWUsername.get().getAccountId() != accountId) {
+            throw new IllegalArgumentException("ERROR: Username already exists: " + newUsername);
+        }
+
+        Account updatedAccount = new Account(accountId, newUsername);
+
+        accountDao.update(updatedAccount); // Has to be updated before returned or else it is void.
+        return updatedAccount;
 
     }
 }
