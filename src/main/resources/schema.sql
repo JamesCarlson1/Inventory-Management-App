@@ -1,6 +1,8 @@
 CREATE TABLE accounts (
     account_id INTEGER PRIMARY KEY,
     account_name TEXT,
+    unique_items INTEGER,
+    total_items INTEGER,
     UNIQUE(account_name)
 );
 
@@ -9,6 +11,7 @@ CREATE TABLE items (
     account_id INTEGER,
     item_name TEXT,
     amt INTEGER,
+    cost INTEGER,
     FOREIGN KEY (account_id) REFERENCES accounts(account_id) ON DELETE CASCADE,
     UNIQUE(account_id, item_name),
     CHECK (amt >= 0)
