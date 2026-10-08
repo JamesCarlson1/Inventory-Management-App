@@ -36,7 +36,7 @@ public class ItemService {
 
 
 
-    public Item createItem (Long accountId, String itemName, long amt) throws SQLException {
+    public Item createItem (Long accountId, String itemName, long cost, long amt) throws SQLException {
         Optional<Account> ifExists = accountDao.findByAccountId(accountId);
 
         // Can't do "null" since it can never return null. (Since Optional<Account>) So you have to do ".isPresent()".
@@ -50,7 +50,7 @@ public class ItemService {
             throw new IllegalArgumentException("ERROR: Item name already exists: " + itemName + "     For given accountId: " + accountId);
         }
 
-        Item newItem = new Item(null, itemName, accountId, amt);
+        Item newItem = new Item(null, itemName, accountId, cost, amt);
         return itemDao.create(newItem);     
     }
 
@@ -70,14 +70,29 @@ public class ItemService {
         }
 
         // Makes new updatedItem.
-        Item updatedItem = new Item(itemId, newName, existingItem.getAccountId(), existingItem.getAmt());
+        Item updatedItem = new Item(itemId, newName, existingItem.getAccountId(), existingItem.getCost(), existingItem.getAmt());
         itemDao.update(updatedItem); // Has to be updated before returned or else it returns as void.
         return updatedItem;
     }
 
+    
+
+    public Item setC (Long itemId, long cost) throws SQLException {
+        Optional<Item> ifExists = itemDao.findByItemId(itemId);
+
+        if (!ifExists.isPresent()) {
+            throw new IllegalArgumentException("ERROR: Item not found: " + itemId);
+        }
+
+        Item existingItem = ifExists.get();
+        existingItem.setCost(cost);
+        itemDao.update(existingItem);
+        return existingItem;
+    }
 
 
-    public Item set (Long itemId, long amt) throws SQLException {
+
+    public Item setA (Long itemId, long amt) throws SQLException {
         Optional<Item> ifExists = itemDao.findByItemId(itemId);
 
         // Can't do "null" since it can never return null. (Since Optional<Item>) So you have to do ".isPresent()".

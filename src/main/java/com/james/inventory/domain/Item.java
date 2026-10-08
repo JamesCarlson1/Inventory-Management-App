@@ -8,12 +8,14 @@ public class Item {
     private final Long item_id;
     private String item_name;
     private final Long account_id;
+    private long cost;
     private long amt;
 
-    public Item (Long item_id, String item_name, Long account_id, long amt) {
+    public Item (Long item_id, String item_name, Long account_id, long cost, long amt) {
         this.item_id = item_id;
         this.item_name = item_name;
         this.account_id = account_id;
+        this.cost = cost;
         this.amt = amt;
     }
 
@@ -39,6 +41,13 @@ public class Item {
         this.item_name = item_name;
     }
 
+
+    public long getCost() {
+        return this.cost;
+    }
+    public void setCost (long cost) {
+        this.cost = cost;
+    }
 
 
     public long getAmt () {

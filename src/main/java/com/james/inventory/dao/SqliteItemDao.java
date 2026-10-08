@@ -33,7 +33,7 @@ public class SqliteItemDao implements ItemDao {
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    items.add(new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("amt")));
+                    items.add(new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("cost"), rs.getLong("amt")));
                 }
                 return items;
             }
@@ -52,7 +52,7 @@ public class SqliteItemDao implements ItemDao {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    items.add(new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("amt")));
+                    items.add(new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("cost"), rs.getLong("amt")));
                 }
                 return items;
             }
@@ -70,7 +70,7 @@ public class SqliteItemDao implements ItemDao {
             try (ResultSet rs = pstmt.executeQuery()) {
                 // Checks if a row was found.
                 if (rs.next()) {
-                    Item item = new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("amt"));
+                    Item item = new Item(rs.getLong("item_id"), rs.getString("item_name"), rs.getLong("account_id"), rs.getLong("cost"), rs.getLong("amt"));
                     return Optional.of(item);
                 } else {
                     return Optional.empty();
@@ -95,7 +95,7 @@ public class SqliteItemDao implements ItemDao {
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return new Item(rs.getLong(1), item.getItemName(), item.getAccountId(), item.getAmt());
+                    return new Item(rs.getLong(1), item.getItemName(), item.getAccountId(), item.getCost(), item.getAmt());
                 }
             }
         }
