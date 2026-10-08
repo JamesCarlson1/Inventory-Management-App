@@ -18,6 +18,7 @@ public class Item {
     }
 
     
+    
     public Long getItemId () {
         return this.item_id;
     }
