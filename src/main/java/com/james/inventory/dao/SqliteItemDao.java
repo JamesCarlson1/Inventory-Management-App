@@ -82,7 +82,7 @@ public class SqliteItemDao implements ItemDao {
 
 
     public Item create (Item item) throws SQLException {
-        String sql = "INSERT INTO items (item_name, account_id, cost, amt) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO items (item_name, account_id, cost, amt) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // Binds the parameters.

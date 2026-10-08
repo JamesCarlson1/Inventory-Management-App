@@ -46,7 +46,11 @@ public class Item {
         return this.cost;
     }
     public void setCost (long cost) {
-        this.cost = cost;
+        if (cost < 0) {
+            throw new IllegalArgumentException("ERROR: Unable to set cost to set ammount to do it being invalid.");
+        } else {
+            this.cost = cost;
+        }
     }
 
 
