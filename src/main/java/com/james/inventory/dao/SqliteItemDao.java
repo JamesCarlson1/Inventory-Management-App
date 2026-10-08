@@ -87,8 +87,9 @@ public class SqliteItemDao implements ItemDao {
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // Binds the parameters.
             pstmt.setString(1, item.getItemName());
-            pstmt.setLong(2, item.getAccountId());
-            pstmt.setLong(3, item.getAmt());
+            pstmt.setLong(2, item.getCost());
+            pstmt.setLong(3, item.getAccountId());
+            pstmt.setLong(4, item.getAmt());
 
             // Executes the command.
             pstmt.executeUpdate();
