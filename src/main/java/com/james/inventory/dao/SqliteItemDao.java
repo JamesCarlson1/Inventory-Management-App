@@ -26,7 +26,7 @@ public class SqliteItemDao implements ItemDao {
 
     // Isn't Optional<Item> since it holds a list and most likely the account already exists.
     public List<Item> findAll() throws SQLException {
-        String sql = "SELECT item_id, account_id, item_name, amt FROM items";
+        String sql = "SELECT item_id, account_id, item_name, cost, amt FROM items";
         List<Item> items = new ArrayList<>();
         
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
@@ -42,7 +42,7 @@ public class SqliteItemDao implements ItemDao {
 
     // Isn't Optional<Item> since it holds a list and most likely the account already exists.
     public List<Item> findByAccountId(Long accountId) throws SQLException {
-        String sql = "SELECT item_id, item_name, account_id, amt FROM items WHERE account_id = ?";
+        String sql = "SELECT item_id, item_name, account_id, cost, amt FROM items WHERE account_id = ?";
         List<Item> items = new ArrayList<>();
         
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
@@ -60,7 +60,7 @@ public class SqliteItemDao implements ItemDao {
     }
 
     public Optional<Item> findByItemId(Long itemId) throws SQLException {
-        String sql = "SELECT item_id, account_id, item_name, amt FROM items WHERE item_id = ?";
+        String sql = "SELECT item_id, account_id, item_name, cost, amt FROM items WHERE item_id = ?";
 
         // This sends the SQL template to the database so it can be parsed, compiled, and optimized ahead of time.
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
@@ -82,7 +82,7 @@ public class SqliteItemDao implements ItemDao {
 
 
     public Item create (Item item) throws SQLException {
-        String sql = "INSERT INTO items (item_name, account_id, amt) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO items (item_name, account_id, cost, amt) VALUES (?, ?, ?)";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // Binds the parameters.
@@ -117,12 +117,13 @@ public class SqliteItemDao implements ItemDao {
     
 
     public void update (Item item) throws SQLException {
-        String sql = "UPDATE items SET item_name = ?, amt = ? WHERE item_id = ?";
+        String sql = "UPDATE items SET item_name = ?, cost = ?, amt = ? WHERE item_id = ?";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setString(1, item.getItemName());
-            pstmt.setLong(2, item.getAmt());
-            pstmt.setLong(3, item.getItemId());
+            pstmt.setLong(2, item.getCost());
+            pstmt.setLong(3, item.getAmt());
+            pstmt.setLong(4, item.getItemId());
 
             pstmt.executeUpdate();
         }
