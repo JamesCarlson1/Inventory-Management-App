@@ -3,13 +3,26 @@ package com.james.inventory;
 import java.util.Scanner;
 import java.util.Arrays;
 import java.util.InputMismatchException;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.FileNotFoundException;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.SQLException;
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+
+import com.james.inventory.dao.AccountDao;
+import com.james.inventory.dao.ItemDao;
+import com.james.inventory.dao.SqliteAccountDao;
+import com.james.inventory.dao.SqliteItemDao;
+import com.james.inventory.service.AccountService;
+import com.james.inventory.service.ItemService;
 
 public class Window extends JFrame{
     private static int Files; // the ammount of files
@@ -648,9 +661,20 @@ public class Window extends JFrame{
         }
     }
 
-    public static void main(String[] argv) {
+    public static void main(String[] argv) throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:inventory.db");
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute("PRAGMA foreign_keys = ON;");
+        }
+        AccountDao accountDao = new SqliteAccountDao(conn);
+        ItemDao itemDao = new SqliteItemDao(conn);
+
+        AccountService accountService = new AccountService(accountDao);
+        ItemService itemService = new ItemService(itemDao, accountDao);
+        
         javax.swing.SwingUtilities.invokeLater(new Runnable(){
             public void run() {
+
                 Window panel = new Window();
             }
         });
