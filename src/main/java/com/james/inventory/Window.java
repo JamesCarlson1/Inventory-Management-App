@@ -25,26 +25,26 @@ import com.james.inventory.service.AccountService;
 import com.james.inventory.service.ItemService;
 
 public class Window extends JFrame{
-    private static int Files; // the ammount of files
-    private static int[] lengths;
-    private static String[] names;    //  Width Height
+    private int Files; // the ammount of files
+    private int[] lengths;
+    private String[] names;    //  Width Height
     private static final int[]  titleWH = {1000, 035};   // ↓
-    private static final int[]   prodWH = {1000, 365};   // The heights must add up to 500 and the widths must all be 1000
-    private static final int[] optionWH = {1000, 100};   // ↑
+    private final int[]   prodWH = {1000, 365};   // The heights must add up to 500 and the widths must all be 1000
+    private final int[] optionWH = {1000, 100};   // ↑
     private static final Font titleFont = new Font("Arial", Font.BOLD, 20);    // ↓
-    private static final Font prodTFont = new Font("Arial", Font.BOLD, 15);    // ↓
-    private static final Font prodFFont = new Font("Arial", Font.BOLD, 25);    // These are all for the different fonts throughout the Window
-    private static final Font optionPFont = new Font("Arial", Font.BOLD, 17);  // ↑
-    private static final Font optionFont = new Font("Arial", Font.BOLD, 14);   // ↑
-    private static final Border panelLayout = BorderFactory.createLineBorder(Color.BLACK, 2);  // ↓
-    private static final Border prodLayout = BorderFactory.createLineBorder(Color.BLACK, 1);   // These are for the borders in the Window
-    private static Product[][] inventory;
-    private static int currinv = -1;
-    private static int currscreen = 0;
-    private static int code;
-    private static JPanel mainPanel;
-    private static JFrame frame;
-    private static CardLayout cardLayout;
+    private final Font prodTFont = new Font("Arial", Font.BOLD, 15);    // ↓
+    private final Font prodFFont = new Font("Arial", Font.BOLD, 25);    // These are all for the different fonts throughout the Window
+    private final Font optionPFont = new Font("Arial", Font.BOLD, 17);  // ↑
+    private final Font optionFont = new Font("Arial", Font.BOLD, 14);   // ↑
+    private final Border panelLayout = BorderFactory.createLineBorder(Color.BLACK, 2);  // ↓
+    private final Border prodLayout = BorderFactory.createLineBorder(Color.BLACK, 1);   // These are for the borders in the Window
+    private Product[][] inventory;
+    private int currinv = -1;
+    private int currscreen = 0;
+    private int code;
+    private JPanel mainPanel;
+    private JFrame frame;
+    private CardLayout cardLayout;
 
     public void InitializeVariables () {
         try {
@@ -580,85 +580,6 @@ public class Window extends JFrame{
             Foptions.add(rowPanel);
         }
         return Foptions;
-    }
-
-    public static String[] reorder(String[] names) {
-        try {
-            String[] Nnames = new String[names.length];
-            char z;
-            int pos = 0;
-            for (int i = 0; i < 10; i++) {      // ↓
-                z = (char)(i + 48);             // Makes the range set from 0 -> 9 in ASCII
-                for (int x = 0; x < names.length; x++) {
-                    if (names[x] != null) {
-                        if (names[x].charAt(names[x].indexOf(".") - 1) == z) {
-                            Nnames[pos] = names[x];
-                            pos += 1;
-                        }
-                    }
-                }
-            }
-            PrintWriter files = new PrintWriter("fileNames.txt");
-            files.println(Nnames.length);
-            for (int i = 0; i < Nnames.length; i++) {
-                files.println(Nnames[i]);
-            }
-            files.close();
-            return Nnames;
-        } catch (FileNotFoundException e) {
-            System.out.print("Could not locate file, exiting program");
-            System.exit(1);
-        }
-        return names;
-    }
-    public static void nameWriter(String[] names, boolean removing, String Fname, int Files) {
-        try {
-            if (removing) {
-                System.out.println("Removing file");
-                for (int i = 0; i < names.length; i++) {
-                    if (names[i].equals(Fname)) {
-                        names[i] = null;
-                        Files -= 1;
-                    }
-                }
-            } else {
-                System.out.println("Adding file");
-                Files += 1;
-                names = Arrays.copyOf(names, Files);
-                names[names.length - 1] = Fname;
-            }
-            PrintWriter writer = new PrintWriter("fileNames.txt");
-            writer.println(Files);
-            names = reorder(names);
-            for (int i = 0; i < names.length; i++) {
-                if (names[i] != null) {
-                    writer.println(names[i]);
-                }
-            }
-            writer.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Could not locate file, exiting program");
-            System.exit(1);
-        }
-    }
-    public static void SaE (String[] names, int[] leng, Product[][] inventory) {
-        try {
-            names = reorder(names);
-            PrintWriter[] writer = new PrintWriter[names.length];
-            for (int i = 0; i < writer.length; i++) {
-                writer[i] = new PrintWriter(names[i]);
-                writer[i].println(leng[i]);
-                for (int x = 0; x < inventory[i].length; x++) {
-                    if (inventory[i][x].getName() != null) {
-                        writer[i].println(inventory[i][x].getName() + "," + inventory[i][x].getQuantity());
-                    }
-                }
-                writer[i].close();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Could not locate file, exiting program");
-            System.exit(1);
-        }
     }
 
     public static void main(String[] argv) throws SQLException {
