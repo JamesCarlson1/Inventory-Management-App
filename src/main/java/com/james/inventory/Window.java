@@ -26,7 +26,7 @@ import com.james.inventory.service.ItemService;
 
 public class Window extends JFrame{
     private final AccountService accountService;
-    private final ItemService itemServic;
+    private final ItemService itemService;
 
 
 
@@ -112,7 +112,7 @@ public class Window extends JFrame{
             System.exit(1);
         }
     }
-    public Window () {
+    public Window (AccountService accountService, ItemService itemService) {
         InitializeVariables();
         frame = new JFrame("Window");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
