@@ -25,6 +25,13 @@ import com.james.inventory.service.AccountService;
 import com.james.inventory.service.ItemService;
 
 public class Window extends JFrame{
+    private final AccountService accountService;
+    private final ItemService itemServic;
+
+
+
+
+
     private int Files; // the ammount of files
     private int[] lengths;
     private String[] names;    //  Width Height
@@ -596,7 +603,7 @@ public class Window extends JFrame{
         javax.swing.SwingUtilities.invokeLater(new Runnable(){
             public void run() {
 
-                Window panel = new Window();
+                Window panel = new Window(accountService, itemService);
             }
         });
   }
