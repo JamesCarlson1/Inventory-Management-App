@@ -2,6 +2,7 @@ package com.james.inventory;
 
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.List;
 import java.util.InputMismatchException;
 
 import java.io.File;
@@ -21,6 +22,7 @@ import com.james.inventory.dao.AccountDao;
 import com.james.inventory.dao.ItemDao;
 import com.james.inventory.dao.SqliteAccountDao;
 import com.james.inventory.dao.SqliteItemDao;
+import com.james.inventory.domain.Account;
 import com.james.inventory.service.AccountService;
 import com.james.inventory.service.ItemService;
 
@@ -112,7 +114,9 @@ public class Window extends JFrame{
             System.exit(1);
         }
     }
-    public Window (AccountService accountService, ItemService itemService) {
+    public Window (AccountService accountService, ItemService itemService) throws SQLException {
+        this.accountService = accountService;
+        this.itemService = itemService;
         InitializeVariables();
         frame = new JFrame("Window");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -138,10 +142,11 @@ public class Window extends JFrame{
         mainPanel.add(editPanel, "INV" + index + " " + currscreenindex);
         cardLayout.show(mainPanel, "INV" + index + " " + currscreenindex);
     }
-    private JPanel titles(int ind, int screen) {
+    private JPanel titles(int ind, int screen) throws SQLException {
         JPanel Ftitles = new JPanel();
         if (ind == -1) {
-            Ftitles.setLayout(new GridLayout(1,Files,0,0));
+            List<Account> accounts = accountService.findAll();
+            Ftitles.setLayout(new GridLayout(1,accounts.size(),0,0));
             Ftitles.setPreferredSize(new Dimension(titleWH[0], titleWH[1]));
             Ftitles.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
             for (int i = 0; i < Files; i++) {
