@@ -1,4 +1,4 @@
-package com.james.inventory.ui;
+package com.james.inventory;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
