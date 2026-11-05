@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AccountService, Account } from './account';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,10 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('frontend');
+export class App implements OnInit {
+  accounts: Account[] = [];
+  constructor (private accountService: AccountService) {}
+  ngOnInit(): void {
+    this.accountService.getAccounts().subscribe(data => this.accounts = data);
+  }
 }
