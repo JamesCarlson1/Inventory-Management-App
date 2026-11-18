@@ -18,6 +18,6 @@ export class AccountService {
   
     createAccount (username: string): Observable<Account> {
       return this.http.post<Account>
-      ('http://localhost:8080/accounts?username=${username}', {});
+      (`http://localhost:8080/accounts?username=${username}`, {});
     }
 }
