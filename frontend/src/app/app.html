@@ -1,3 +1,8 @@
+<input #usernameInput type = "text"
+placholder = "Username" />
+<button (click) = "addAccount(usernameInput.value)">
+  Add Account</button>
+
 @for (account of accounts; track account.accountId) {
   <p>{{ account.username }}</p>
 }

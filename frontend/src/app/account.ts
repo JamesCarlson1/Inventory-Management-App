@@ -15,4 +15,9 @@ export class AccountService {
       return this.http.get<Account[]>
       ('http://localhost:8080/accounts');
     }
+  
+    createAccount (username: string): Observable<Account> {
+      return this.http.post<Account>
+      ('http://localhost:8080/accounts?username=${username}', {});
+    }
 }

@@ -14,4 +14,8 @@ export class App implements OnInit {
   ngOnInit(): void {
     this.accountService.getAccounts().subscribe(data => this.accounts = data);
   }
+
+  addAccount (username: string): void {
+    this.accountService.createAccount(username).subscribe(newAccount => this.accounts.push(newAccount));
+  }
 }
