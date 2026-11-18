@@ -2,6 +2,8 @@ package com.james.inventory.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -44,5 +46,13 @@ public class AppConfig {
     @Bean
     public ItemService itemService (ItemDao itemDao, AccountDao accountDao) {
         return new ItemService(itemDao, accountDao);
+    }
+
+    @Bean public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+            }
+        };
     }
 }
